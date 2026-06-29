@@ -1,0 +1,1 @@
+route support_agent model gpt-x fallback: none max_cost: missing safety_tier: none
