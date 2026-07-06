@@ -1,33 +1,33 @@
 # Model Route Lint
 
-Lint model routing configs for missing fallbacks, budgets, and safety tiers. The idea is simple: give Model Route Lint the local file or fixture, get a readable result, and decide what needs attention before the next handoff.
+![Model Route Lint cover](assets/readme-cover.svg)
 
-## Project card
+## What it protects
 
-<img src="assets/readme-cover.svg" alt="Model Route Lint cover" width="100%" />
+Lint model routing configs for missing fallbacks, budgets, and safety tiers. It keeps the review small: one input file, a short list of findings, and enough context to fix the line that caused the warning.
 
 | Detail | Value |
 | --- | --- |
-| Area | model quality |
-| Command | `model-route-lint` |
-| Example | `examples/sample.txt` |
+| Area | model evaluation |
+| Entry | `model-route-lint` |
+| Input | plain text |
+| Output | terminal findings, optional JSON |
 
-## What would make me stop a review
+## Inspection line
 
-| Stopper | Level | Why it matters |
-| --- | --- | --- |
-| `missing-fallback` | high | model route has no fallback |
-| `missing-budget` | medium | route budget control is missing |
-| `missing-safety-tier` | low | safety tier is not declared |
+![Signal map](assets/readme-diagram.svg)
 
-## Run from a fresh clone
+| Signal | Level | What it flags | Fix direction |
+| --- | --- | --- | --- |
+| `missing-fallback` | high | model route has no fallback | Add a fallback model or explicit degraded-mode behavior. |
+| `missing-budget` | medium | route budget control is missing | Set a max cost or token budget for the route. |
+| `missing-safety-tier` | low | safety tier is not declared | Declare safety posture for this model path. |
+
+## Command path
 
 ```bash
 git clone https://github.com/mertefekurt/model-route-lint.git
 cd model-route-lint
-python -m venv .venv
-source .venv/bin/activate
 python -m pip install -e ".[dev]"
 model-route-lint examples/sample.txt
-model-route-lint examples/sample.txt --json
 ```
