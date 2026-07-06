@@ -1,71 +1,47 @@
-# model-route-lint
+<img src="assets/readme-cover.svg" alt="Model Route Lint cover" width="100%" />
 
-`model-route-lint` is a small local CLI that lint model routing configs for missing fallbacks, budgets, and safety tiers.
+# Model Route Lint
 
-## Why it is useful
+Lint model routing configs for missing fallbacks, budgets, and safety tiers.
 
-LLM routing tables become production control planes. This CLI checks route configs for brittle fallback and governance gaps.
-
-## Key features
-
-- reads text, JSON, JSONL, or CSV inputs
-- returns Markdown or JSON reports
-- supports severity-based CI exit codes
-- keeps all checks deterministic and offline
-- includes focused rules for this project:
-- `missing-fallback`: model route has no fallback
-- `missing-budget`: route budget control is missing
-- `missing-safety-tier`: safety tier is not declared
-
-## Installation
-
-```bash
-python -m pip install -e ".[dev]"
-```
-
-## Usage
-
-```bash
-model-route-lint examples/sample.txt
-model-route-lint examples/sample.txt --json
-model-route-lint path/to/input.txt --fail-on medium --out report.md
-python -m model_route_lint --help
-```
-
-Example input:
-
-```text
-route support_agent model gpt-x fallback: none max_cost: missing safety_tier: none
-```
-
-## CLI options
-
-```text
-model-route-lint INPUT [--format auto|text|jsonl|csv|json] [--json]
-             [--fail-on low|medium|high] [--out PATH]
-```
-
-`INPUT` is any model routing YAML, JSON, or notes. The tool exits with code `2` when findings meet the selected
-threshold, which makes it easy to use in GitHub Actions or release checks.
+![stack](https://img.shields.io/badge/stack-Python-be185d?style=flat-square) ![python](https://img.shields.io/badge/python-3.11-4b5563?style=flat-square) ![license](https://img.shields.io/badge/license-MIT-2563eb?style=flat-square) ![ci](https://img.shields.io/badge/ci-GitHub%20Actions-16a34a?style=flat-square)
 
 ## Workflow
 
-```mermaid
-flowchart LR
-    A[input file] --> B[format reader]
-    B --> C[project-specific rules]
-    C --> D[risk score]
-    D --> E[Markdown or JSON report]
-```
+1. Collect the review notes or exported records.
+2. Run `model-route-lint` against the file.
+3. Read the findings in Markdown, or switch to JSON for automation.
+4. Fail CI only at the severity level you care about.
 
-## Tests
+## Checks
+
+| Rule | Severity | What it catches |
+| --- | --- | --- |
+| `missing-fallback` | high | model route has no fallback |
+| `missing-budget` | medium | route budget control is missing |
+| `missing-safety-tier` | low | safety tier is not declared |
+
+## Command line
 
 ```bash
-ruff check .
-pytest
-python -m model_route_lint --help
+python -m pip install -e ".[dev]"
+model-route-lint examples/sample.txt
+model-route-lint examples/sample.txt --json --fail-on medium
 ```
 
-## License
+## Sample risky input
 
-MIT
+```text
+examples/sample.txt
+```
+
+## Project shape
+
+```text
+.github/        CI workflow
+examples/       sample inputs
+src/            package source
+tests/          test coverage
+.gitignore      project file
+pyproject.toml  package metadata
+```
